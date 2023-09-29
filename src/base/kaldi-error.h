@@ -144,20 +144,50 @@ private:
 };
 
 // Logging macros.
+
+#ifndef NDEBUG
 #define KALDI_ERR                                                              \
   ::kaldi::MessageLogger::LogAndThrow() = ::kaldi::MessageLogger(              \
       ::kaldi::LogMessageEnvelope::kError, __func__, __FILE__, __LINE__)
+#else
+#define KALDI_ERR                                                              \
+  ::kaldi::MessageLogger::LogAndThrow() = ::kaldi::MessageLogger(              \
+      ::kaldi::LogMessageEnvelope::kError, "__func__", "__FILE__", 0)
+#endif
+
+#ifndef NDEBUG
 #define KALDI_WARN                                                             \
   ::kaldi::MessageLogger::Log() = ::kaldi::MessageLogger(                      \
       ::kaldi::LogMessageEnvelope::kWarning, __func__, __FILE__, __LINE__)
+#else
+#define KALDI_WARN                                                             \
+  ::kaldi::MessageLogger::Log() = ::kaldi::MessageLogger(                      \
+      ::kaldi::LogMessageEnvelope::kWarning, "__func__", "__FILE__", 0)
+#endif
+
+#ifndef NDEBUG
 #define KALDI_LOG                                                              \
   ::kaldi::MessageLogger::Log() = ::kaldi::MessageLogger(                      \
       ::kaldi::LogMessageEnvelope::kInfo, __func__, __FILE__, __LINE__)
+#else
+#define KALDI_LOG                                                              \
+  ::kaldi::MessageLogger::Log() = ::kaldi::MessageLogger(                      \
+      ::kaldi::LogMessageEnvelope::kInfo, "__func__", "__FILE__", 0)
+#endif
+
+#ifndef NDEBUG
 #define KALDI_VLOG(v)                                                          \
   if ((v) <= ::kaldi::GetVerboseLevel())                                       \
   ::kaldi::MessageLogger::Log() =                                              \
       ::kaldi::MessageLogger((::kaldi::LogMessageEnvelope::Severity)(v),       \
                              __func__, __FILE__, __LINE__)
+#else
+#define KALDI_VLOG(v)                                                          \
+  if ((v) <= ::kaldi::GetVerboseLevel())                                       \
+  ::kaldi::MessageLogger::Log() =                                              \
+      ::kaldi::MessageLogger((::kaldi::LogMessageEnvelope::Severity)(v),       \
+                             "__func__", "__FILE__", 0)
+#endif
 
 /***** KALDI ASSERTS *****/
 
